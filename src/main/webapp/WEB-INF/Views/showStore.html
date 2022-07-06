@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+  <tr>
+    <td><label for="title">title:</label>
+    </td>
+    <td>
+      <p id="title" th:text="${store.Title}"></p>
+    </td>
+  </tr>
+  <tr>
+    <td><label for="address">address:</label>
+    </td>
+    <td>
+      <p id="address" th:text="${store.Address}"></p>
+    </td>
+  </tr>
+  <tr>
+    <td><label for="phone">phone:</label>
+    </td>
+    <td>
+      <p id="phone" th:text="${store.Phone}"></p>
+    </td>
+  </tr>
+  <tr>
+    <td><label for="email">email:</label>
+    </td>
+    <td>
+      <p id="email" th:text="${store.Email}"></p>
+    </td>
+  </tr>
+  <tr>
+    <td><label for="link">link:</label>
+    </td>
+    <td>
+      <p id="link" th:text="${store.Link}"></p>
+    </td>
+  </tr>
+  <tr>
+    <td><label for="category">category:</label>
+    </td>
+    <td>
+      <p id="category" th:text="${store.Category}"></p>
+    </td>
+  </tr>
+  <tr>
+    <td><label for="description">description:</label>
+    </td>
+    <td>
+      <p id="description" th:text="${store.Description}"></p>
+    </td>
+  </tr>
+</table>
+<a href="/store/main">to address book</a>
+</body>
+</html>

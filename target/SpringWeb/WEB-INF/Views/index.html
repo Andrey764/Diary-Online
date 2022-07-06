@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+</head>
+<body>
+<a href="/diary/">to log in</a>
+<ul>
+    <li th:each="diary : ${user.diaries}">
+        <div th:text="${diary.getTitle()}"></div>
+        <div th:if="${!diary.getArchive()}">
+            <a th:href="'/diary/deleteDiary?nickName='+${user.NickName}+'&title='+${diary.getTitle()} ">delete</a>
+            <a th:href="'/diary/editDiary?nickName='+${user.NickName}+'&title='
+                +${diary.getTitle()}+'&content='+${diary.getContent()}">edit</a>
+            <a th:href="'/diary/showDiary?nickName='+${user.NickName}+'&title='+${diary.getTitle()}">view</a>
+        </div>
+        <div th:if="${diary.getArchive()}">
+            <a th:href="'/diary/archiving?nickName=' + ${user.NickName} + '&title=' + ${diary.getTitle()}
+             + '&archive=false'">unarchive</a>
+        </div>
+    </li>
+</ul>
+<a th:href="'/diary/addDiary?nickName='+${user.NickName}">add Diary</a>
+</body>
+</html>

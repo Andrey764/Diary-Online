@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diary</title>
+</head>
+<body>
+    <div>
+      <h1 th:text="${diary.getTitle()}"></h1>
+      <p th:text="${diary.getContent}"></p>
+        <form th:action="'/diary/showDiary?nickName='+${nickName}+'&title='+${diary.getTitle()}" method="post">
+            <input type="hidden" name="nickName" th:value="${nickName}">
+            <input type="hidden" name="title" th:value="${diary.getTitle()}">
+            <input type="file" name="filePath" value="Add File">
+            <input type="submit" value="Save">
+        </form>
+        <a th:href="'/diary/archiving?nickName=' + ${nickName} + '&title=' + ${diary.getTitle()}
+             + '&archive=true'">archiving</a>
+<!--        <form th:action="'/diary/archiving?nickName='+${nickName}+'&title='+${diary.getTitle()}" method="post">-->
+<!--            <label>Archive ?-->
+<!--                <input type="checkbox" name="archive">-->
+<!--            </label>-->
+<!--            <input type="submit" value="Arhiving" th:checked="${diary.getArchive()}">-->
+<!--        </form>-->
+    </div>
+    <a th:href="'/diary/main?nickName='+${userName}">to Main</a>
+</body>
+</html>

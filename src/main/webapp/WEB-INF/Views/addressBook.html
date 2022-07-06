@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Address Book</title>
+</head>
+<body>
+<form action="/book/search" method="post">
+    <label>Name person:
+        <input type="text" name="searchName">
+    </label>
+    <input type="submit" value="search">
+</form>
+<h1>Address Book</h1>
+<div th:each="human : ${humans}">
+    <div th:text="${human.Name} + ' ' + ${human.Surname} + ' ' + ${human.Phone}"></div>
+    <a th:href="'/book/delete?name='+${human.Name}">delete</a>
+    <a th:href="'/book/show?name='+${human.Name}">show</a>
+    <a th:href="'/book/edit?name='+${human.Name}">edit</a>
+</div>
+<a href="/book/add">add human</a>
+</body>
+</html>

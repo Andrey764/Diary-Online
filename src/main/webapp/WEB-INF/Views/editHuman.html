@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit</title>
+</head>
+<body>
+<form method="post" action="/book/editSave">
+    <input type="hidden" name="oldName" th:value="${human.Name}">
+    <label>Name:
+        <input type="text" name="name"  th:value="${human.Name}">
+    </label><br>
+    <label>Surname:
+        <input type="text" name="surname" th:value="${human.Surname}">
+    </label><br>
+    <label>Patronymic:
+        <input type="text" name="patronymic" th:value="${human.Patronymic}">
+    </label><br>
+    <label>Phone:
+        <input type="text" name="phone" th:value="${human.Phone}">
+    </label><br>
+    <label>Email:
+        <input type="text" name="email" th:value="${human.Email}">
+    </label><br>
+    <label>LinkToBlog:
+        <input type="text" name="linkToBlog" th:value="${human.LinkToBlog}">
+    </label><br>
+    <label>Note:
+        <input type="text" name="note" th:value="${human.Note}">
+    </label><br>
+    <input type="submit" value="save">
+</form>
+</body>
+</html>
