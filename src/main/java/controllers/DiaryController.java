@@ -3,7 +3,6 @@ package controllers;
 import Models.Context;
 import Models.Diary;
 import Models.User;
-import Models.WorkInFiles;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.File;
 import java.io.IOException;
 
 @Controller
@@ -108,8 +108,8 @@ public class DiaryController {
 
     @PostMapping("/showDiary")
     public String ShowDiary(@RequestParam("nickName") String nickName, @RequestParam("title") String title,
-                            @RequestParam("filePath") String filePath, Model model){
-        context.AddFileToDiary(filePath, nickName, title);
+                            @RequestParam("file") File file, Model model){
+        context.AddFileToDiary(file, nickName, title);
         model.addAttribute("userName", nickName);
         return MySetAttribute(model, "diary", context.GetDiary(nickName, title), "diary");
     }
@@ -132,8 +132,6 @@ public class DiaryController {
         return MySetAttribute(model, "user", context.GetUser(nickName), "index");
     }
 
-    //TODO Сделать установку даты и времени для удаление архива
-    //TODO Сделать добавление файлов к дневнику
     //TODO После выполнение предыдущих пунктов и при наличии времени и желания
     // сделать возможность делится дневниками с другими пользователями
 }

@@ -1,5 +1,8 @@
 package Models;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,9 +91,9 @@ public class Context {
         }
     }
 
-    public void AddFileToDiary(String filePath, String nickName, String title){
+    public void AddFileToDiary(File file, String nickName, String title){
         try {
-            WorkInFiles.TransferFile(filePath, nickName, title);
+            WorkInFiles.TransferFile(file, nickName, title);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
