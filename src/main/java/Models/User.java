@@ -40,10 +40,13 @@ public class User {
         return diary;
     }
 
-    public void EditDiary(String oldTitle, Diary diary){
+    public void EditDiary(String oldTitle, String diaryNewTitle, String newContent, String creator, boolean isArchive){
         for (Diary d : diaries)
             if (d.getTitle().equals(oldTitle)) {
-                d.Copy(diary);
+                d.setArchive(isArchive);
+                d.setTitle(diaryNewTitle);
+                d.setContent(newContent);
+                d.setCreator(creator);
                 break;
             }
     }

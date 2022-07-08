@@ -68,10 +68,10 @@ public class Context {
     }
 
     private void ReplaceDiary(User u, Diary d, String diaryOldTitle, String diaryNewTitle, String newContent) throws IOException {
-        u.EditDiary(diaryOldTitle, d);
+        u.EditDiary(diaryOldTitle, diaryNewTitle, newContent, d.getCreator(), d.getArchive());
         if (!d.getCreator().equals("")) {
             User creator = GetUser(d.getCreator());
-            creator.EditDiary(diaryOldTitle, d);
+            creator.EditDiary(diaryOldTitle, diaryNewTitle, newContent, d.getCreator(), d.getArchive());
             WorkInFiles.DeleteDiary(u.NickName, diaryOldTitle, creator.NickName);
             WorkInFiles.WriteUser(creator);
             WorkInFiles.WriteUser(u);

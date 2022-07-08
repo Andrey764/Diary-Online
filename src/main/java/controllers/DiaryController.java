@@ -140,6 +140,4 @@ public class DiaryController {
         return MySetAttribute(model, "diary", context.GetDiary(whoseUser, title), "diary");
     }
 
-    //TODO После выполнение предыдущих пунктов и при наличии времени и желания
-    // сделать возможность делится дневниками с другими пользователями
 }
