@@ -132,6 +132,14 @@ public class DiaryController {
         return MySetAttribute(model, "user", context.GetUser(nickName), "index");
     }
 
+    @GetMapping("/share")
+    public String ShareDiary(@RequestParam("title") String title, @RequestParam("whoseUser")  String whoseUser,
+                             @RequestParam("whowUser") String whowUser, Model model){
+        context.ShareDiary(whoseUser, whowUser, context.GetDiary(whoseUser, title));
+        model.addAttribute("userName", whoseUser);
+        return MySetAttribute(model, "diary", context.GetDiary(whoseUser, title), "diary");
+    }
+
     //TODO После выполнение предыдущих пунктов и при наличии времени и желания
     // сделать возможность делится дневниками с другими пользователями
 }

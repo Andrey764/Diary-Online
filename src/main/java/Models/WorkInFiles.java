@@ -23,28 +23,33 @@ public class WorkInFiles {
                 throw new RuntimeException(e);
             }
     }
-    private static String IsArchiving(Diary d){
+    private static String IsArchivingOrCreator(Diary d){
         String title = d.getTitle();
-        if (d.getArchive())
-            title += "&" + d.getArchive();
+        title += "&" + d.getArchive();
+        if(!d.getCreator().equals(""))
+            title += "&" + d.getCreator();
         return title;
     }
     public static void WriteUser(User user) throws IOException {
         List<String> titles = new ArrayList<>();
         for (Diary diary: user.diaries) {
-            CreateDirectory(pathDirectory + "\\" + user.NickName);
-            CreateDirectory(pathDirectory + "\\" + user.NickName + "\\" + diary.getTitle());
-            File file = new File(pathDirectory + "\\" + user.NickName + "\\"
+            String pathU = diary.getCreator().equals("") ? user.NickName : diary.getCreator();
+            CreateDirectory(pathDirectory + "\\" + pathU);
+            CreateDirectory(pathDirectory + "\\" + pathU + "\\" + diary.getTitle());
+            File file = new File(pathDirectory + "\\" + pathU + "\\"
                     + diary.getTitle() + "\\" + diary.getTitle() + ".txt");
             file.createNewFile();
             FileWriter writer = new FileWriter(file);
             writer.write(diary.getContent());
             writer.close();
-            titles.add(IsArchiving(diary));
+            titles.add(IsArchivingOrCreator(diary));
         }
         WriteDiaryTitleList(user.NickName, titles);
     }
     public static void WriteDiaryTitleList(String nickName, List<String> titles) throws IOException {
+        File file = new File(pathDirectory + "\\" + nickName);
+        if (!file.exists())
+                CreateDirectory(pathDirectory + "\\" + nickName);
         FileWriter writer = new FileWriter(pathDirectory + "\\" + nickName + "\\" + diaryTitleList);
             for(String title: titles)
                 writer.write(title + "\n");
@@ -91,13 +96,15 @@ public class WorkInFiles {
         return result;
     }
 
-    private static Diary IsArchive(String title){
-        String[] str = title.split("&");
+    private static Diary IsArchiveOrCreator(String title){
+        String[] strs = title.split("&");
         Diary d;
-        if (str.length == 2) {
-            d = new Diary(str[0], "");
-            if (str[1].equals("true"))
-            d.setArchive(true);
+        if (strs.length >= 2) {
+            d = new Diary(strs[0], "");
+            if (strs[1].equals("true"))
+                d.setArchive(true);
+            if (strs.length == 3)
+                d.setCreator(strs[2]);
         }
         else
             d  = new Diary(title, "");
@@ -108,9 +115,9 @@ public class WorkInFiles {
         List<String> titles = ReadDiaryTitleList(nickName);
         List<Diary> result = new ArrayList<>();
         for(String title: titles) {
-            Diary d = IsArchive(title);
-            File file = new File(pathDirectory + "\\" + nickName + "\\" + d.getTitle()
-                    + "\\" + d.getTitle() + ".txt");
+            Diary d = IsArchiveOrCreator(title);
+            File file = new File(pathDirectory + "\\" + (d.getCreator().equals("") ? nickName : d.getCreator())
+                    + "\\" + d.getTitle() + "\\" + d.getTitle() + ".txt");
             if(file.exists()) {
                 FileReader read = new FileReader(file);
                 Scanner scanner = new Scanner(read);
@@ -124,13 +131,24 @@ public class WorkInFiles {
     }
     public static void DeleteDiary(String nickName, String title) throws IOException {
         RecursiveDelete(new File(pathDirectory + "\\" + nickName + "\\" + title));
+        CleaningList(nickName, title);
+    }
+    public static void DeleteDiary(String nickName, String title, String creator) throws IOException {
+        RecursiveDelete(new File(pathDirectory + "\\" + creator + "\\" + title));
+        CleaningList(creator, title);
+        CleaningList(nickName, title);
+    }
+    private static void CleaningList(String nickName, String title) throws IOException {
         List<String> titles = ReadDiaryTitleList(nickName);
-        titles.remove(title);
+        String buffer = "";
+        for(String item: titles)
+            if (item.split("&")[0].equals(title))
+                buffer = item;
+        titles.remove(buffer);
         RecursiveDelete(new File(pathDirectory + "\\" + nickName + "\\" + diaryTitleList));
         WriteDiaryTitleList(nickName, titles);
         if (titles.size() == 0)
             RecursiveDelete(new File(pathDirectory + "\\" + nickName));
-
     }
 
     private static void RecursiveDelete(File file) {

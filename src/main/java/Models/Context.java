@@ -46,6 +46,13 @@ public class Context {
         for (User u: users)
             if (u.NickName.equals(userName)){
                 u.AddDiary(title, context);
+                break;
+            }
+    }
+    public void AddDiary(String userName, Diary diary) throws IOException {
+        for (User u: users)
+            if (u.NickName.equals(userName)){
+                u.AddDiary(diary);
             }
     }
 
@@ -53,15 +60,37 @@ public class Context {
             throws IOException {
         for (User u: users)
             if (u.NickName.equals(userName))
-                u.EditDiary(diaryOldTitle, diaryNewTitle, newContent);
+                for (Diary d : u.diaries)
+                    if (d.getTitle().equals(diaryOldTitle)) {
+                        ReplaceDiary(u, d, diaryOldTitle, diaryNewTitle, newContent);
+                        break;
+                    }
+    }
+
+    private void ReplaceDiary(User u, Diary d, String diaryOldTitle, String diaryNewTitle, String newContent) throws IOException {
+        u.EditDiary(diaryOldTitle, d);
+        if (!d.getCreator().equals("")) {
+            User creator = GetUser(d.getCreator());
+            creator.EditDiary(diaryOldTitle, d);
+            WorkInFiles.DeleteDiary(u.NickName, diaryOldTitle, creator.NickName);
+            WorkInFiles.WriteUser(creator);
+            WorkInFiles.WriteUser(u);
+        }
+        else {
+            WorkInFiles.DeleteDiary(u.NickName, diaryOldTitle);
+            WorkInFiles.WriteUser(u);
+        }
     }
 
     public void DeleteDiary(String userName, String diaryTitle){
-        for (User u: users)
-            if (u.NickName.equals(userName)) {
+        Diary d = GetDiary(userName, diaryTitle);
+        for (User u: users) {
+            if (!d.getCreator().equals(""))
+                if (u.NickName.equals(d.getCreator()))
+                    u.diaries.remove(d);
+            if (u.NickName.equals(userName))
                 u.DeleteDiary(diaryTitle);
-                break;
-            }
+        }
     }
 
     public Diary GetDiary(String userName, String diaryTitle){
@@ -106,11 +135,20 @@ public class Context {
                     if (d.getTitle().equals(title)) {
                         d.setArchive(isArcive);
                         try {
-                            u.EditDiary(d.getTitle(), d.getTitle(), d.getContent());
+                            ReplaceDiary(u, d, d.getTitle(), d.getTitle(), d.getContent());
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
                         break;
                     }
+    }
+
+    public void ShareDiary(String whoseUser, String whomUser, Diary diary){
+        diary.setCreator(whoseUser);
+        try {
+            AddDiary(whomUser, diary);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

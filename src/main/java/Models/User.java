@@ -29,13 +29,21 @@ public class User {
         return diary;
     }
 
-    public void EditDiary(String oldTitle, String newTitle, String newContent) throws IOException {
+    public Diary AddDiary(Diary diary) throws IOException {
+        if (diaries == null)
+            diaries = new ArrayList<>();
+        for (Diary d : diaries)
+            if (d.getTitle().equals(diary.getTitle()))
+                return null;
+        diaries.add(diary);
+        WorkInFiles.WriteUser(this);
+        return diary;
+    }
+
+    public void EditDiary(String oldTitle, Diary diary){
         for (Diary d : diaries)
             if (d.getTitle().equals(oldTitle)) {
-                d.setTitle(newTitle);
-                d.setContent(newContent);
-                WorkInFiles.DeleteDiary(NickName, oldTitle);
-                WorkInFiles.WriteUser(this);
+                d.Copy(diary);
                 break;
             }
     }
@@ -48,12 +56,15 @@ public class User {
                 break;
             }
         if (buffer != null) {
-            diaries.remove(buffer);
             try {
-                WorkInFiles.DeleteDiary(NickName, buffer.getTitle());
+                if (!buffer.getCreator().equals(""))
+                    WorkInFiles.DeleteDiary(NickName, buffer.getTitle(), buffer.getCreator());
+                else
+                    WorkInFiles.DeleteDiary(NickName, buffer.getTitle());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            diaries.remove(buffer);
         }
     }
 

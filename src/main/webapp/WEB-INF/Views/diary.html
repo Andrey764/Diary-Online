@@ -14,6 +14,15 @@
             <input type="file" name="file" value="Add File">
             <input type="submit" value="Save">
         </form>
+        <form action="/diary/share" method="get">
+            <input type="hidden" name="title" th:value="${diary.getTitle()}">
+            <input type="hidden" name="whoseUser" th:value="${nickName}">
+            <h2>Share diary</h2>
+            <label>User nick:
+                <input type="text" name="whowUser">
+            </label>
+            <input type="submit" value="Add">
+        </form>
         <a th:href="'/diary/archiving?nickName=' + ${nickName} + '&title=' + ${diary.getTitle()}
              + '&archive=true'">archiving</a>
     </div>
