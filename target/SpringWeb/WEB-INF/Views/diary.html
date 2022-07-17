@@ -16,7 +16,7 @@
                 <input type="hidden" name="nickName" th:value="${nickName}">
                 <input type="hidden" name="title" th:value="${diary.getTitle()}">
                 <input type="file" name="file" value="Add File" class="btn btn-success btn-sm">
-                <input type="submit" value="Save">
+                <input type="submit" value="Save" class="btn btn-success btn-sm">
             </form>
             <form action="/diary/share" method="get">
                 <input type="hidden" name="title" th:value="${diary.getTitle()}">
