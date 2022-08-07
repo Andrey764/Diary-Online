@@ -6,30 +6,73 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
           crossorigin="anonymous">
     <title>Diary</title>
+    <style>
+        .body{
+            width: 75%;
+            min-width: 500px;
+            margin: 3% auto;
+            background: rgb(255, 250, 140);
+            border-radius: 15px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+        }
+        .content{
+            display: flex;
+            flex-direction: column;
+        }
+        .func{
+            padding-right: 15px;
+            min-width: 100px;
+        }
+        .func-form{
+            border: 1px solid rgba(0, 0, 0, 0.33);
+            border-radius: 5px;
+            margin-bottom: 5px;
+            min-width: 100px;
+            padding: 3px;
+        }
+        .func,
+        .func-form{
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+        .center{
+            min-width: 100px;
+        }
+        .form-center{
+            min-width: 95px;
+        }
+        .center,
+        .form-center{
+            margin: 0 auto 5px auto;
+            width: 100%;
+        }
+        .card-text{
+            font-style: italic;
+            font-family: Dialog;
+        }
+    </style>
 </head>
-<body  class="card">
-    <div class="card-body">
-      <h1 th:text="${diary.getTitle()}" class="card-title"></h1>
-      <p th:text="${diary.getContent}" class="card-text"></p>
-        <div class="body">
-            <form action="/diary/showDiary" method="post">
-                <input type="hidden" name="nickName" th:value="${nickName}">
-                <input type="hidden" name="title" th:value="${diary.getTitle()}">
-                <input type="file" name="file" value="Add File" class="btn btn-success btn-sm">
-                <input type="submit" value="Save" class="btn btn-success btn-sm">
-            </form>
-            <form action="/diary/share" method="get">
-                <input type="hidden" name="title" th:value="${diary.getTitle()}">
-                <input type="hidden" name="whoseUser" th:value="${nickName}">
-                <label>Share diary:
-                    <input type="text" name="whowUser" placeholder="user nick">
-                </label>
-                <input type="submit" value="Add" class="btn btn-success btn-sm">
-            </form>
+<body>
+    <div class="body">
+      <div class="func">
+          <form action="/diary/share" method="get" class="func-form">
+              <input type="hidden" name="title" th:value="${diary.getTitle()}">
+              <input type="hidden" name="whoseUser" th:value="${nickName}">
+              <label class="form-center" for="whowUser">Share diary:</label>
+              <input class="form-center" id="whowUser" type="text" name="whowUser" placeholder="user nick">
+              <input type="submit" value="Add" class="btn btn-success btn-sm form-center">
+          </form>
+          <a th:href="'/diary/archiving?nickName=' + ${nickName} + '&title=' + ${diary.getTitle()}
+        + '&archive=true'" class="btn btn-success btn-sm center">archiving</a>
+          <a th:href="'/diary/main?nickName='+${nickName}" class="btn btn-primary btn-sm center">to Main</a>
+      </div>
+        <div class="content">
+            <h2 th:text="${diary.getTitle()}" class="card-title"></h2>
+            <p th:text="${diary.getContent}" class="card-text"></p>
         </div>
-        <a th:href="'/diary/archiving?nickName=' + ${nickName} + '&title=' + ${diary.getTitle()}
-             + '&archive=true'" class="btn btn-link btn-sm">archiving</a>
     </div>
-    <a th:href="'/diary/main?nickName='+${userName}" class="btn btn-primary btn-sm">to Main</a>
 </body>
 </html>

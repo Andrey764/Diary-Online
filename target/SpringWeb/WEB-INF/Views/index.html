@@ -6,26 +6,44 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
           crossorigin="anonymous">
     <title>Main</title>
+    <style>
+        .body{
+            width: 75%;
+            min-width: 500px;
+            margin: 3% auto;
+            background: rgb(255, 250, 140);
+            border-radius: 15px;
+            padding: 15px;
+        }
+        .reg-item{
+            display: flex;
+            flex-direction: row-reverse;
+        }
+    </style>
 </head>
 <body>
-<a href="/diary/" class="btn btn-primary btn-sm">to log in</a>
-<ul>
-    <li th:each="diary : ${user.diaries}">
-        <div th:text="${diary.getTitle()}"></div>
-        <div th:if="${!diary.getArchive()}">
-            <a th:href="'/diary/deleteDiary?nickName='+${user.NickName}+'&title='+${diary.getTitle()} "
-               class="btn btn-link btn-sm">delete</a>
-            <a th:href="'/diary/editDiary?nickName='+${user.NickName}+'&title='
-                +${diary.getTitle()}+'&content='+${diary.getContent()}" class="btn btn-link btn-sm">edit</a>
-            <a th:href="'/diary/showDiary?nickName='+${user.NickName}+'&title='+${diary.getTitle()}"
-               class="btn btn-link btn-sm">view</a>
-        </div>
-        <div th:if="${diary.getArchive()}">
-            <a th:href="'/diary/archiving?nickName=' + ${user.NickName} + '&title=' + ${diary.getTitle()}
-             + '&archive=false'" class="btn btn-primary btn-sm">unarchive</a>
-        </div>
-    </li>
-</ul>
-<a th:href="'/diary/addDiary?nickName='+${user.NickName}" class="btn btn-primary btn-sm">add Diary</a>
+<div class="body">
+    <ul>
+        <li th:each="diary : ${user.diaries}">
+            <div th:text="${diary.getTitle()}"></div>
+            <div th:if="${!diary.getArchive()}">
+                <a th:href="'/diary/deleteDiary?nickName='+${user.NickName}+'&title='+${diary.getTitle()} "
+                   class="btn btn-danger btn-sm">delete</a>
+                <a th:href="'/diary/editDiary?nickName='+${user.NickName}+'&title='
+                +${diary.getTitle()}+'&content='+${diary.getContent()}" class="btn btn-success btn-sm">edit</a>
+                <a th:href="'/diary/showDiary?nickName='+${user.NickName}+'&title='+${diary.getTitle()}"
+                   class="btn btn-info btn-sm">view</a>
+            </div>
+            <div th:if="${diary.getArchive()}">
+                <a th:href="'/diary/archiving?nickName=' + ${user.NickName} + '&title=' + ${diary.getTitle()}
+             + '&archive=false'" class="btn btn-success btn-sm">unarchive</a>
+            </div>
+        </li>
+    </ul>
+    <div class="reg-item">
+        <a th:href="'/diary/addDiary?nickName='+${user.NickName}" class="btn btn-success btn-sm">add Diary</a>
+        <a href="/diary/" class="btn btn-primary btn-sm me-2">to log in</a>
+    </div>
+</div>
 </body>
 </html>

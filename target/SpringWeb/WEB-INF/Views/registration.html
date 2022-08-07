@@ -6,24 +6,54 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
           crossorigin="anonymous">
     <title>Registration</title>
+    <style>
+        .reg{
+            width: 33%;
+            min-width: 300px;
+            margin: 15% auto;
+            background: rgb(255, 250, 140);
+            border-radius: 15px;
+            padding: 15px;
+        }
+        .reg-item{
+            display: flex;
+            flex-direction: row-reverse;
+        }
+        .Width100{
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
 <div th:text="${error != null ? error : ''}"></div>
-<form action="/diary/registration" method="post">
-    <label>Nickname:
-        <input type="text" name="nickName">
-    </label>
-    <label>Email:
-        <input type="email" name="email">
-    </label>
-    <label>Password:
-        <input type="password" name="password">
-    </label>
-    <label>ConfPassword:
-        <input type="password" name="confPassword">
-    </label>
-    <input type="submit" value="Register" class="btn btn-success btn-sm">
-    <a href="/diary/" class="btn btn-primary btn-sm">Log In</a>
+<form action="/diary/registration" method="post" class="reg">
+    <table>
+        <tr class="Width100">
+            <td><label for="nickName">Nickname:</label></td>
+            <td class="Width100"><input class="Width100" id="nickName" type="text" name="nickName"></td>
+        </tr>
+        <tr class="Width100">
+            <td><label for="email">Email:</label></td>
+            <td class="Width100"><input class="Width100" id="email" type="email" name="email"></td>
+        </tr>
+        <tr class="Width100">
+            <td><label for="pass">Password:</label></td>
+            <td class="Width100"><input class="Width100" id="pass" type="password" name="password"></td>
+        </tr>
+        <tr class="Width100">
+            <td><label for="confPass">ConfPassword:</label></td>
+            <td class="Width100"><input class="Width100" id="confPass" type="password" name="confPassword"></td>
+        </tr>
+        <tr class="Width100">
+            <td></td>
+            <td>
+                <div class="reg-item">
+                    <input type="submit" value="Register" class="btn btn-success btn-sm">
+                    <a href="/diary/" class="btn btn-primary btn-sm me-2">Log In</a>
+                </div>
+            </td>
+        </tr>
+    </table>
 </form>
 </body>
 </html>

@@ -6,19 +6,49 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
           crossorigin="anonymous">
     <title>Add Diary</title>
+    <style>
+        .reg{
+            width: 33%;
+            min-width: 300px;
+            margin: 15% auto;
+            background: rgb(255, 250, 140);
+            border-radius: 15px;
+            padding: 15px;
+        }
+        .reg-item{
+            display: flex;
+            flex-direction: row-reverse;
+        }
+        .Width100{
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-<form th:action="'/diary/'+${link != null ? link : 'addDiary'}" method="post">
+<form th:action="'/diary/'+${link != null ? link : 'addDiary'}" method="post" class="reg">
     <input type="hidden" name="nickName" th:value="${nickName}">
     <input type="hidden" name="oldTitle" th:value="${title}">
-    <label>Title:
-        <input type="text" name="title" th:value="${title != null ? title : ''}">
-    </label>
-    <label>Content:
-        <textarea name="content" th:placeholder="${content != null ? content : ''}"></textarea>
-    </label>
-    <input type="submit" value="Save" class="btn btn-success btn-sm">
+    <table>
+        <tr class="Width100">
+            <td><label for="title">Title:</label></td>
+            <td class="Width100"><input class="Width100" id="title" type="text"
+                name="title" th:value="${title != null ? title : ''}"></td>
+        </tr>
+        <tr class="Width100">
+            <td><label for="content">Content:</label></td>
+            <td class="Width100"><input class="Width100" id="content" type="text"
+                name="content" th:value="${content != null ? content : ''}"></td>
+        </tr>
+        <tr class="Width100">
+            <td></td>
+            <td>
+                <div class="reg-item">
+                    <input type="submit" value="Save" class="btn btn-success btn-sm">
+                    <a th:href="'/diary/main?nickName='+${nickName}" class="btn btn-primary btn-sm me-2">to Main</a>
+                </div>
+            </td>
+        </tr>
+    </table>
 </form>
-<a th:href="'/diary/main?nickName='+${nickName}" class="btn btn-primary btn-sm">to Main</a>
 </body>
 </html>
