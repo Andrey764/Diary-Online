@@ -1,10 +1,10 @@
 package Models;
 
-import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User {
+public class User implements Serializable {
     public String NickName;
     public String Email;
     public String Password;
@@ -17,7 +17,7 @@ public class User {
         Password = password;
     }
 
-    public Diary AddDiary(String title, String content) throws IOException {
+    public Diary AddDiary(String title, String content){
         if (diaries == null)
             diaries = new ArrayList<>();
         for (Diary d : diaries)
@@ -25,18 +25,16 @@ public class User {
                 return null;
         Diary diary = new Diary(title, content);
         diaries.add(diary);
-        WorkInFiles.WriteUser(this);
         return diary;
     }
 
-    public Diary AddDiary(Diary diary) throws IOException {
+    public Diary AddDiary(Diary diary){
         if (diaries == null)
             diaries = new ArrayList<>();
         for (Diary d : diaries)
             if (d.getTitle().equals(diary.getTitle()))
                 return null;
         diaries.add(diary);
-        WorkInFiles.WriteUser(this);
         return diary;
     }
 
@@ -58,17 +56,7 @@ public class User {
                 buffer = d;
                 break;
             }
-        if (buffer != null) {
-            try {
-                if (!buffer.getCreator().equals(""))
-                    WorkInFiles.DeleteDiary(NickName, buffer.getTitle(), buffer.getCreator());
-                else
-                    WorkInFiles.DeleteDiary(NickName, buffer.getTitle());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            diaries.remove(buffer);
-        }
+        diaries.remove(buffer);
     }
 
 
@@ -79,12 +67,5 @@ public class User {
         diaries = null;
         for (Diary d : user.diaries)
             diaries.add(d);
-    }
-
-    public static boolean MyConteins(List<User> users, User searchUser){
-        for (User u : users)
-            if (u.NickName.equals(searchUser.NickName))
-                return true;
-        return false;
     }
 }

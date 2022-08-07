@@ -3,6 +3,7 @@ package controllers;
 import Models.Context;
 import Models.Diary;
 import Models.User;
+import Models.WorkInFiles;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,7 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/diary")
 public class DiaryController {
-    static Context context = new Context();
+    static Context context = WorkInFiles.ReadContext();
     private String MySetAttribute(Model model, String attribute, String value, String returnPage){
         model.addAttribute(attribute, value);
         return returnPage;
@@ -104,20 +105,6 @@ public class DiaryController {
                             Model model){
         model.addAttribute("nickName", nickName);
         return MySetAttribute(model, "diary", context.GetDiary(nickName, title), "diary");
-    }
-
-    @PostMapping("/showDiary")
-    public String ShowDiary(@RequestParam("nickName") String nickName, @RequestParam("title") String title,
-                            @RequestParam("file") File file, Model model){
-        context.AddFileToDiary(file, nickName, title);
-        model.addAttribute("userName", nickName);
-        return MySetAttribute(model, "diary", context.GetDiary(nickName, title), "diary");
-    }
-
-    @PostMapping("/saveFile")
-    public String SaveFile(@RequestParam("nickName") String nickName, @RequestParam("title") String title,
-                           @RequestParam("path") String path){
-        return "";
     }
 
     @GetMapping("/main")

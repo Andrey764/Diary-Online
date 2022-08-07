@@ -1,6 +1,8 @@
 package Models;
 
-public class Diary {
+import java.io.Serializable;
+
+public class Diary implements Serializable {
     private String title;
     private String content;
     private boolean isArchive = false;

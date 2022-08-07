@@ -1,24 +1,21 @@
 package Models;
 
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Context {
+public class Context implements Serializable {
     public List<User> users;
     public Context(){
         users = new ArrayList<>();
-        Download();
     }
 
     public void AddUser(User user) {
         if (users == null)
             users = new ArrayList<>();
         users.add(user);
-        Save();
+        WorkInFiles.WriteContext(this);
     }
 
     public User GetUser(String userName){
@@ -28,58 +25,31 @@ public class Context {
         return null;
     }
 
-    public void DeletUser(String userName){
-        for (User user : users)
-            if (user.NickName.equals(userName)){
-                users.remove(user);
-                return;
-            }
-    }
-
-    public void CopyUser(User user){
-        for (User u : users)
-            if (user.NickName.equals(u.NickName))
-                u.Copy(user);
-    }
-
-    public void AddDiary(String userName, String title, String context) throws IOException {
+    public void AddDiary(String userName, String title, String context){
         for (User u: users)
             if (u.NickName.equals(userName)){
                 u.AddDiary(title, context);
                 break;
             }
+        WorkInFiles.WriteContext(this);
     }
     public void AddDiary(String userName, Diary diary) throws IOException {
         for (User u: users)
             if (u.NickName.equals(userName)){
                 u.AddDiary(diary);
             }
+        WorkInFiles.WriteContext(this);
     }
 
-    public void ReplaceDiary(String userName, String diaryOldTitle, String diaryNewTitle, String newContent)
-            throws IOException {
+    public void ReplaceDiary(String userName, String diaryOldTitle, String diaryNewTitle, String newContent){
         for (User u: users)
             if (u.NickName.equals(userName))
                 for (Diary d : u.diaries)
                     if (d.getTitle().equals(diaryOldTitle)) {
-                        ReplaceDiary(u, d, diaryOldTitle, diaryNewTitle, newContent);
+                        u.EditDiary(diaryOldTitle, diaryNewTitle, newContent, d.getCreator(), d.getArchive());
                         break;
                     }
-    }
-
-    private void ReplaceDiary(User u, Diary d, String diaryOldTitle, String diaryNewTitle, String newContent) throws IOException {
-        u.EditDiary(diaryOldTitle, diaryNewTitle, newContent, d.getCreator(), d.getArchive());
-        if (!d.getCreator().equals("")) {
-            User creator = GetUser(d.getCreator());
-            creator.EditDiary(diaryOldTitle, diaryNewTitle, newContent, d.getCreator(), d.getArchive());
-            WorkInFiles.DeleteDiary(u.NickName, diaryOldTitle, creator.NickName);
-            WorkInFiles.WriteUser(creator);
-            WorkInFiles.WriteUser(u);
-        }
-        else {
-            WorkInFiles.DeleteDiary(u.NickName, diaryOldTitle);
-            WorkInFiles.WriteUser(u);
-        }
+        WorkInFiles.WriteContext(this);
     }
 
     public void DeleteDiary(String userName, String diaryTitle){
@@ -91,6 +61,7 @@ public class Context {
             if (u.NickName.equals(userName))
                 u.DeleteDiary(diaryTitle);
         }
+        WorkInFiles.WriteContext(this);
     }
 
     public Diary GetDiary(String userName, String diaryTitle){
@@ -101,46 +72,16 @@ public class Context {
                         return d;
         return null;
     }
-
-    public void Save(){
-        try {
-            WorkInFiles.WriteUsers(users);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void Download(){
-        try {
-            users.addAll(WorkInFiles.ReadUsers());
-            for(User user: users)
-                user.diaries = WorkInFiles.ReadDiaries(user.NickName);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void AddFileToDiary(File file, String nickName, String title){
-        try {
-            WorkInFiles.TransferFile(file, nickName, title);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public void ArchivingDiary(String nickName, String title, boolean isArcive) {
         for (User u : users)
             if (u.NickName.equals(nickName))
                 for (Diary d : u.diaries)
                     if (d.getTitle().equals(title)) {
                         d.setArchive(isArcive);
-                        try {
-                            ReplaceDiary(u, d, d.getTitle(), d.getTitle(), d.getContent());
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+                        u.EditDiary(d.getTitle(), d.getTitle(), d.getContent(), d.getCreator(), d.getArchive());
                         break;
                     }
+        WorkInFiles.WriteContext(this);
     }
 
     public void ShareDiary(String whoseUser, String whomUser, Diary diary){
