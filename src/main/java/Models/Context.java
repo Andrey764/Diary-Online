@@ -10,7 +10,6 @@ public class Context implements Serializable {
     public Context(){
         users = new ArrayList<>();
     }
-
     public void AddUser(User user) {
         if (users == null)
             users = new ArrayList<>();
